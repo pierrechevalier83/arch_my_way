@@ -188,6 +188,18 @@ reboot
 
 As prompted systemd-firstboot, set the locale (`uk` or `us`, typically), the hostname and the timezone (`Europe/London`)
 
+* Connect to the internet again with [iwctl](https://wiki.archlinux.org/title/Iwd#iwctl) to connect to the wifi
+```
+$ systemctl start iwd                  # Start the systemd service
+$ iwctl                                # Run iwctl
+[iwd]# device list                     # Get the device (for instance, wlan0)
+[iwd]# station <device> scan           # Scan for networks
+[iwd]# station <device> get-networks   # List ssid for available networks
+[iwd]# station <device> connect <ssid> # Connect to desired ssid
+ctrl + D
+ping 8.8.8.8
+```
+
 * Create a user
 ```
 systemctl enable systemd-homed
@@ -225,7 +237,7 @@ Depends = reflector
 Exec = /bin/sh -c 'systemctl start reflector.service; [ -f /etc/pacman.d/mirrorlist.pacnew ] && rm /etc/pacman.d/mirrorlist.pacnew'
 ```
 
-Install gnome
+* Install gnome
 ```
 sudo pacman -S gnome gnome-extra
 sudo systemctl enable gdm.service
@@ -234,6 +246,13 @@ sudo systemctl start NetworkManager
 sudo systemctl enable NetworkManager
 ```
 
+* Install desired applications
 ```
 sudo pacman -S firefox alacritty discord exa ninja cmake git
 ```
+
+* Setup ssh keys
+```
+ssh-keygen
+```
+* Log-in to the github web interface and add the public key (from `~/.ssh/id_rsa.pub`
