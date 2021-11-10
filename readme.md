@@ -248,7 +248,7 @@ sudo systemctl enable NetworkManager
 
 * Install desired applications
 ```
-sudo pacman -S firefox alacritty discord exa ninja cmake git
+sudo pacman -S firefox alacritty discord exa ninja cmake git rustup alacritty
 ```
 
 * Setup ssh keys
@@ -256,3 +256,87 @@ sudo pacman -S firefox alacritty discord exa ninja cmake git
 ssh-keygen
 ```
 * Log-in to the github web interface and add the public key (from `~/.ssh/id_rsa.pub`
+* Configure git
+```
+~/.gitconfig
+---
+[user]
+	name = Pierre Viseu Chevalier
+	email = pierrechevalier83@gmail.com
+[core]
+	editor = nvim
+[alias]
+	logo = log --oneline --graph --decorate
+	loga = log --oneline --graph --decorate --all
+[rebase]
+	autosquash = true
+[pull]
+	rebase = true
+[init]
+	defaultBranch = main
+```
+
+* Setup rust environment by following [upstream instructions](https://www.rust-lang.org/learn/get-started)
+```
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+source ~/.cargo/env
+```
+
+* Install [yay](https://github.com/Jguer/yay), an aur hepler that gets out of your way
+```
+git clone https://aur.archlinux.org/yay.git
+cd yay
+makepkg -si
+```
+
+* Install aur packages
+```
+yay -S google-chrome
+```
+
+* Pimp it!
+```
+sudo pacman -S arc-gtk-theme arc-icon-theme
+```
+* Open `gnome-tweaks` and set
+  * Appearance >> Applications: Arc Dark
+  * Appearance >> Icons: Arc
+
+* Install [hack-nerdfont](https://github.com/ryanoasis/nerd-fonts/tree/master/patched-fonts/Hack#linux)
+  * Download the latest complete version of Hack.
+```
+cd ~/Downloads
+sudo pacman -S wget
+wget https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/Hack/Regular/complete/Hack%20Regular%20Nerd%20Font%20Complete.ttf
+wget https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/Hack/Regular/complete/Hack%20Regular%20Nerd%20Font%20Complete%20Mono.ttf
+wget https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/Hack/Italic/complete/Hack%20Italic%20Nerd%20Font%20Complete.ttf
+wget https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/Hack/Italic/complete/Hack%20Italic%20Nerd%20Font%20Complete%20Mono.ttf
+wget https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/Hack/Bold/complete/Hack%20Bold%20Nerd%20Font%20Complete.ttf
+wget https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/Hack/Bold/complete/Hack%20Bold%20Nerd%20Font%20Complete%20Mono.ttf
+wget https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/Hack/BoldItalic/complete/Hack%20Bold%20Italic%20Nerd%20Font%20Complete.ttf
+wget https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/Hack/BoldItalic/complete/Hack%20Bold%20Italic%20Nerd%20Font%20Complete%20Mono.ttf
+```
+  * Copy the font files to either your system font folder (often /usr/share/fonts/) or user font folder (often ~/.local/share/fonts/ or /usr/local/share/fonts).
+```
+sudo mv Hack*.ttf /usr/share/fonts/TTF/
+```
+  * Clear and regenerate your font cache and indexes with the following command:
+```
+$ fc-cache -f -v
+```
+  * You can confirm that the fonts are installed with the following command:
+```
+$ fc-list | rg "Hack"
+```
+
+* Open `gnome-tweaks` and set
+  * Fonts >> Interface Text: Hack Nerd Font Regular 11
+  * Fonts >> Document Text: Hack Nerd Font Regular 11
+  * Fonts >> Monospace Text: Hack Nerd Font Mono Regular 10
+  * Fonts >> Legacy Window Titles Text: Hack Nerd Font Bold 11
+
+# TODO:
+* configure gdm to recognize my user and set profile picture
+* configure alacritty
+* configure zsh, including aliases
+* install and configure sway
