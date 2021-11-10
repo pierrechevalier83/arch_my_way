@@ -335,8 +335,29 @@ $ fc-list | rg "Hack"
   * Fonts >> Monospace Text: Hack Nerd Font Mono Regular 10
   * Fonts >> Legacy Window Titles Text: Hack Nerd Font Bold 11
 
+* Pull my dotfiles
+```
+mkdir ~/Documents/code
+cd ~/Documents/code
+git clone git@github.com:pierrechevalier83/dotfiles
+```
+* Configure zsh
+```
+> ln -s ~/Documents/code/dotfiles/.zshrc ~/.config/.zshrc
+> zsh # configure p10k by following the prompt
+```
+* Configure neovim
+```
+> sudo pacman -S nodejs npm # Needed for coc plugin
+> mkdir ~/.config/nvim
+> curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+> ln -s ~/Documents/code/dotfiles/neovim/init.vim ~/.config/nvim/init.vim
+> nvim
+> :PlugInstall
+> :UpdateRemotePlugins
+> :CocInstal coc-rust-analyzer
+```
 # TODO:
 * configure gdm to recognize my user and set profile picture
 * configure alacritty
-* configure zsh, including aliases
 * install and configure sway
