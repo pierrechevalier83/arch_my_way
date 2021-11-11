@@ -261,7 +261,7 @@ sudo systemctl enable NetworkManager
 
 * Install desired applications
 ```
-sudo pacman -S firefox alacritty discord exa ninja cmake git rustup transmission-gtk
+sudo pacman -S firefox alacritty discord exa ninja cmake git rsync rustup transmission-gtk libreoffice-fresh
 ```
 
 * Setup ssh keys
@@ -421,8 +421,36 @@ sudo systemctl enable bluetooth
 sudo systemctl start bluetooth
 ```
 
+* Enable btrfs snapshots with [snapper](https://wiki.archlinux.org/title/Snapper) and snap-pac
+```
+sudo pacman -S snapper snap-pac
+sudo snapper -c root create-config /
+yay -S snapper-gui-git
+```
+* Backup the boot partition on pacman transactions
+  Create this file:
+```
+/etc/pacman.d/hooks/50-bootbackup.hook
+---
+[Trigger]
+Operation = Upgrade
+Operation = Install
+Operation = Remove
+Type = Path
+Target = usr/lib/modules/*/vmlinuz
+
+[Action]
+Depends = rsync
+Description = Backing up /boot...
+When = PostTransaction
+Exec = /usr/bin/rsync -a --delete /boot /.bootbackup
+```
+* Edit the snapper config and keep as many snapshots as desired
+```
+sudo nvim /etc/snapper/configs/root
+```
+
 # TODO:
-* replace beginning, especially systemd-firstboot with arch_install
-* Setup btrfs snapshots management
+* replace beginning, especially systemd-firstboot with manual steps (more reliable)
 * Setup printers
 * install and configure sway
