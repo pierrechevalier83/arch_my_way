@@ -108,11 +108,13 @@ mount /dev/mapper/luks /mnt
 btrfs subvolume create /mnt/@
 btrfs subvolume create /mnt/@home
 btrfs subvolume create /mnt/@var
+btrfs subvolume create /mnt/@snapshots
 umount /mnt
 mount -o subvol=@,ssd,compress=lzo,noatime,nodiratime /dev/mapper/luks /mnt
-mkdir /mnt/{boot,home,var}
+mkdir /mnt/{boot,home,var,snapshots}
 mount -o subvol=@home,ssd,compress=lzo,noatime,nodiratime /dev/mapper/luks /mnt/home
 mount -o subvol=@var,ssd,compress=lzo,noatime,nodiratime /dev/mapper/luks /mnt/var
+mount -o subvol=@snapshots,ssd,compress=lzo,noatime,nodiratime /dev/mapper/luks /mnt/.snapshots
 mount /dev/sda1 /mnt/boot
 ```
 
@@ -448,6 +450,21 @@ Exec = /usr/bin/rsync -a --delete /boot /.bootbackup
 * Edit the snapper config and keep as many snapshots as desired
 ```
 sudo nvim /etc/snapper/configs/root
+```
+* Allow easy restores the "proper" way
+```
+yay -S snapper-rollback
+sudo nvim /etc/snapper-rollback.conf
+# Change last line to
+dev = /dev/mapper/luks
+```
+* Test the rollback setup at least once end-to-end to avoid bad surprises
+```
+sudo pacman -S awesome # and keep track of root before that command (say 7)
+which awesome # /usr/bin/awesome
+sudo snapper-rollback 7
+reboot
+which awesome # awesome not found
 ```
 
 # TODO:
