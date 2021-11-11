@@ -297,6 +297,10 @@ sudo pacman -S arc-gtk-theme arc-icon-theme
 * Open `gnome-tweaks` and set
   * Appearance >> Applications: Arc Dark
   * Appearance >> Icons: Arc
+  * Top Bar >> Battery percentage: true
+  * Top Bar >> Weekday: true
+  * Windows >> Window Focus: Focus on hover
+  * Workspace >> Display handling: Workspaces span displays
 
 * Install [hack-nerdfont](https://github.com/ryanoasis/nerd-fonts/tree/master/patched-fonts/Hack#linux)
   * Download the latest complete version of Hack.
@@ -345,7 +349,9 @@ git clone git@github.com:pierrechevalier83/dotfiles
 * Configure zsh
 ```
 > ln -s ~/Documents/code/dotfiles/zsh/.zshrc ~/.zshrc
+> sudo ln -s ~/Documents/code/dotfiles/zsh/.zshrc /root/.zshrc
 > zsh # configure p10k by following the prompt
+> sudo zsh # configure p10k for root by following the prompt (makes sense to style it differently to easily distinguish them)
 ```
 * Configure neovim
 ```
@@ -467,7 +473,30 @@ reboot
 which awesome # awesome not found
 ```
 
+# Setup printers
+
+* Setup [printers](https://wiki.archlinux.org/title/CUPS):
+```
+sudo pacman -S cups cups-pdf avahi nss-mdns
+```
+  * Setup [avahi](https://wiki.archlinux.org/title/Avahi)
+    Edit the file `/etc/nsswitch.conf` and change the hosts line to include `mdns_minimal [NOTFOUND=return]` before resolve and dns:
+```
+hosts: ... mdns_minimal [NOTFOUND=return] resolve [!UNAVAIL=return] dns ...
+```
+  * Install printer drivers
+```
+yay -S epson-inkjet-printer
+```
+  * Start and enable the required services:
+```
+sudo systemctl start avahi-daemon cups
+sudo systemctl enable avahi-daemon cups
+```
+  * Open the cups management center (http://localhost:631), login as root
+  * Administration >> Add Printer
+  * The printer should be present, and its correct driver should be available in the drop-down (EPSON ET-2710 Series, ...)
+
 # TODO:
 * replace beginning, especially systemd-firstboot with manual steps (more reliable)
-* Setup printers
 * install and configure sway
