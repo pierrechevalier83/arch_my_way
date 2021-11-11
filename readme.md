@@ -261,7 +261,7 @@ sudo systemctl enable NetworkManager
 
 * Install desired applications
 ```
-sudo pacman -S firefox alacritty discord exa ninja cmake git rustup alacritty
+sudo pacman -S firefox alacritty discord exa ninja cmake git rustup transmission-gtk
 ```
 
 * Setup ssh keys
@@ -414,6 +414,15 @@ sudo dconf update
 * In settings, under Users,
   * pick a profile picture for your user in gdm
   * Enable autologin
+* Enable [bluetooth support](https://wiki.archlinux.org/title/Bluetooth)
+```
+sudo pacman -S bluez
+sudo systemctl enable bluetooth
+sudo systemctl start bluetooth
+```
 
 # TODO:
+* replace beginning, especially systemd-firstboot with arch_install
+* Setup btrfs snapshots management
+* Setup printers
 * install and configure sway
