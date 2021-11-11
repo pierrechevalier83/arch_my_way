@@ -200,11 +200,10 @@ ctrl + D
 ping 8.8.8.8
 ```
 
-* Create a user
+* [Create a user](https://wiki.archlinux.org/title/Users_and_groups)
 ```
-systemctl enable systemd-homed
-systemctl start systemd-homed
-homectl create pierrec --member-of=wheel,sudo
+useradd pierrec -m -G wheel,sudo -s /bin/zsh
+passwd pierrec
 ```
 
 * Give it super powers
@@ -270,25 +269,6 @@ sudo pacman -S firefox alacritty discord exa ninja cmake git rustup alacritty
 ssh-keygen
 ```
 * Log-in to the github web interface and add the public key (from `~/.ssh/id_rsa.pub`
-* Configure git
-```
-~/.gitconfig
----
-[user]
-	name = Pierre Viseu Chevalier
-	email = pierrechevalier83@gmail.com
-[core]
-	editor = nvim
-[alias]
-	logo = log --oneline --graph --decorate
-	loga = log --oneline --graph --decorate --all
-[rebase]
-	autosquash = true
-[pull]
-	rebase = true
-[init]
-	defaultBranch = main
-```
 
 * Setup rust environment by following [upstream instructions](https://www.rust-lang.org/learn/get-started)
 ```
@@ -355,9 +335,14 @@ mkdir ~/Documents/code
 cd ~/Documents/code
 git clone git@github.com:pierrechevalier83/dotfiles
 ```
+
+* Configure git
+```
+> ln -s ~/Documents/code/dotfiles/git/.gitconfig ~/.gitconfig
+```
 * Configure zsh
 ```
-> ln -s ~/Documents/code/dotfiles/.zshrc ~/.config/.zshrc
+> ln -s ~/Documents/code/dotfiles/zsh/.zshrc ~/.zshrc
 > zsh # configure p10k by following the prompt
 ```
 * Configure neovim
@@ -374,7 +359,7 @@ git clone git@github.com:pierrechevalier83/dotfiles
 * Configure alacritty
 ```
 mkdir ~/.config/alacritty
-ln -s ~/Documents/code/dotfiles/alacritty/alacritty.yml
+ln -s ~/Documents/code/dotfiles/alacritty/alacritty.yml ~/.config/alacritty/alacritty.yml
 ```
 ```
 sudo pacman -S brightnessctl
@@ -426,7 +411,9 @@ tap-to-click=true
 ```
 sudo dconf update
 ```
+* In settings, under Users,
+  * pick a profile picture for your user in gdm
+  * Enable autologin
 
 # TODO:
-* configure gdm to recognize my user and set profile picture
 * install and configure sway
