@@ -204,13 +204,14 @@ ping 8.8.8.8
 ```
 systemctl enable systemd-homed
 systemctl start systemd-homed
-homectl create pierrec --member-of=wheel
+homectl create pierrec --member-of=wheel,sudo
 ```
 
 * Give it super powers
 ```
 visudo
 #uncomment line: "%wheel ALL=(ALL) ALL"
+#uncomment line: "%sudo ALL=(ALL) ALL"
 ```
 
 * Setup automatic mirrors management using [reflector](https://wiki.archlinux.org/title/Reflector)
@@ -241,7 +242,20 @@ Exec = /bin/sh -c 'systemctl start reflector.service; [ -f /etc/pacman.d/mirrorl
 ```
 sudo pacman -S gnome gnome-extra
 sudo systemctl enable gdm.service
+```
+* Install and setup NetworkManager
+```
 sudo pacman -S networkmanager
+```
+* Use iwd as the backend by creating this file:
+```
+/etc/NetworkManager/conf.d/wifi_backend.conf
+---
+[device]
+wifi.backend=iwd
+```
+* Enable networking
+```
 sudo systemctl start NetworkManager
 sudo systemctl enable NetworkManager
 ```
@@ -357,7 +371,62 @@ git clone git@github.com:pierrechevalier83/dotfiles
 > :UpdateRemotePlugins
 > :CocInstal coc-rust-analyzer
 ```
+* Configure alacritty
+```
+mkdir ~/.config/alacritty
+ln -s ~/Documents/code/dotfiles/alacritty/alacritty.yml
+```
+```
+sudo pacman -S brightnessctl
+```
+* Customize some shortcuts
+  * Open gnome-settings
+  * Keyboard >> Keyboard Shortcuts >> Customize shortcuts
+    * Windows >> Close window: Super+q
+	* Navigation
+	  * Move to workspace on the left: Ctrl+Alt+Up
+	  * Move to workspace on the right: Ctrl+Alt+Down
+	  * Move window one workspace to the left: Shift+Ctrl+Alt+Up
+	  * Move window one workspace to the right: Shift+Ctrl+Alt+U    * Sound and media (as appropriate based on keyboard)
+	  * Volume down
+	  * Volume up
+	  * Volume mute/unmute
+	* Windows
+	  * Close window: Super+q
+	* Custom Shortcuts
+	  * alacritty: Super+Return
+	  * brightness down: `brightnessctl -c backlight set 2%-`
+	  * brightness up `brightnessctl -c backlight set 2%+`
+	  * firefox: Super+f
+	  * keyboard brightness down: `brightnessctl -d *::kbd_backlight set 10%-`
+	  * keyboard brightness up `brightnessctl -d *::kbd_backlight set 10%+`
+
+* Configure [gdm](https://wiki.archlinux.org/title/GDM)
+```
+> sudo mkdir /etc/dconf/profile
+> sudo nvim /etc/dconf/profile/gdm
+```
+```
+/etc/dconf/profile/gdm
+---
+user-db:user
+system-db:gdm
+file-db:/usr/share/gdm/greeter-dconf-defaults
+```
+```
+> sudo mkdir /etc/dconf/db/gdm.d
+> sudo nvim /etc/dconf/db/gdm.d/06-tap-to-click
+```
+```
+/etc/dconf/db/gdm.d/06-tap-to-click
+---
+[org/gnome/desktop/peripherals/touchpad]
+tap-to-click=true
+```
+```
+sudo dconf update
+```
+
 # TODO:
 * configure gdm to recognize my user and set profile picture
-* configure alacritty
 * install and configure sway
